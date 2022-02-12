@@ -1,5 +1,7 @@
 #pragma once
 #include <math.h>
+#include"List.h"
+#include"ArrayList.h"
 
 class Solver
 {
@@ -17,56 +19,78 @@ public:
    {
       long double index = 0;
       int currentPrecision = 0;
-      bool lastSign;
-      long double lastNumber;
-      long double number;
+      List<Step*>* steps = new ArrayList<Step*>();
 
-      lastNumber = separateRoot(index);
-      lastSign = (lastNumber > 0) ? true : false;
-      index = add(new long double[2]{ index, one / pow(10, currentPrecision) });
-
-      while (currentPrecision != precision)
+      while (currentPrecision != totalPrecision)
       {
-         number = separateRoot(index);
-         bool sign = (number > 0) ? true : false;
+         steps->add(makeStep(index, currentPrecision));
 
-         if (sign != lastSign)
+         bool canCreatePair = steps->getSize() > 1;
+
+         if (canCreatePair)
          {
-            index = (abs(number) < abs(lastNumber)) ? index : add(new long double[2]{ index, (one / pow(10, currentPrecision)) * (-1) });
+            Step* current = steps->get(steps->getSize() - 1);
+            Step* previous = steps->get(steps->getSize() - 2);
 
-            currentPrecision++;
+            if (current->sign != previous->sign)
+            {
+               if (abs(current->number) > abs(previous->number))
+               {
+                  index = add(new long double[2]{ index, nextIndex(currentPrecision) * (-1) });
+               }
 
-            long double tail = (one / pow(10, currentPrecision));
+               currentPrecision++;
 
-            index = add(new long double[2]{ index, tail });
+               index = add(new long double[2]{ index, nextIndex(currentPrecision) });
 
-            lastNumber = separateRoot(index);
-            lastSign = (lastNumber > 0) ? true : false;
+               steps->add(makeStep(index, currentPrecision));
+            }
          }
-         else
-         {
-            lastNumber = number;
-            lastSign = sign;
-         }
 
-         index += (one / pow(10, currentPrecision));
+         index = add(new long double[2]{ index, nextIndex(currentPrecision) });
       }
 
       return index;
    }
 
 private:
+
+   class Step
+   {
+   public:
+
+      long double number;
+      bool sign;
+      int precision;
+   };
+
    long double firstNumber;
    int fnPower;
    long double secondNumber;
    long double thirdNumber;
 
-   int precision = 4;
+   int totalPrecision = 4;
    long double one = 1;
 
-   double separateRoot(double number)
+   long double nextIndex(int stepPrecision)
+   {
+      return (one / pow(10, stepPrecision));
+   }
+
+   long double separateRoot(double number)
    {
       return add(new long double[3]{ pow(number * firstNumber, fnPower), (secondNumber * number), thirdNumber }, 3);
+   }
+
+   Step* makeStep(long double index, int stepPrecision)
+   {
+      Step* newStep = new Step;
+
+      newStep->number = separateRoot(index);
+      newStep->sign = (newStep->number > 0) ? true : false;
+      newStep->precision = stepPrecision;
+
+      return newStep;
    }
 
    long double add(long double input[], int length = 2)
