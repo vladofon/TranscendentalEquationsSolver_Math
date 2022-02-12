@@ -21,6 +21,7 @@ public:
       long double index = 0;
       int currentPrecision = 0;
       List<Step*>* steps = new ArrayList<Step*>();
+      List<Step*>* keySteps = new ArrayList<Step*>();
 
       while (currentPrecision != totalPrecision)
       {
@@ -38,6 +39,11 @@ public:
                if (abs(current->number) > abs(previous->number))
                {
                   index = add(new long double[2]{ index, nextIndex(currentPrecision) * (-1) });
+                  keySteps->add(makeStep(index, currentPrecision));
+               }
+               else
+               {
+                  keySteps->add(makeStep(index, currentPrecision));
                }
 
                currentPrecision++;
@@ -51,7 +57,7 @@ public:
          index = add(new long double[2]{ index, nextIndex(currentPrecision) });
       }
 
-      return steps;
+      return keySteps;
    }
 
 private:

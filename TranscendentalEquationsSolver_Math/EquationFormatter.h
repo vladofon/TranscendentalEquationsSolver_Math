@@ -29,7 +29,7 @@ public:
       List<string>* firstColumn = new ArrayList<string>();
       List<string>* secondColumn = new ArrayList<string>();
 
-      firstColumn = parseIndexes(steps);
+      firstColumn = parseIndexesByPrecision(steps);
       secondColumn = parseNumbers(steps);
 
       schema->fillColumn(0, 0, firstColumn);
@@ -56,7 +56,12 @@ private:
       long size = numbers->getSize();
       for (long i = 0; i < size; i++)
       {
-         stringNumbers->add(to_string(numbers->get(i)->number));
+         string str = to_string(numbers->get(i)->number);
+
+         if (str[0] != '-')
+            str = " " + str;
+
+         stringNumbers->add(str);
       }
 
       return stringNumbers;
@@ -73,5 +78,41 @@ private:
       }
 
       return stringNumbers;
+   }
+
+   List<string>* parseIndexesByPrecision(List<Step*>* indexes)
+   {
+      List<string>* stringIndexes = new ArrayList<string>();
+
+      long size = indexes->getSize();
+      for (long i = 0; i < size; i++)
+      {
+         long double index = indexes->get(i)->index;
+         int precision = indexes->get(i)->precision;
+
+         int indexSizeBeforeFloatPoint = numberLength(index);
+
+         if (precision == 0)
+         {
+            stringIndexes->add(to_string((long)index));
+         }
+         else
+         {
+            string result = to_string(index).substr(0, indexSizeBeforeFloatPoint + precision + 2);
+            stringIndexes->add(result);
+         }
+      }
+
+      return stringIndexes;
+   }
+
+   int numberLength(long number)
+   {
+      long size = 0;
+
+      while (number / 10 != 0)
+         size++;
+
+      return size;
    }
 };
