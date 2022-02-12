@@ -2,6 +2,7 @@
 #include <math.h>
 #include"List.h"
 #include"ArrayList.h"
+#include"Step.h"
 
 class Solver
 {
@@ -15,7 +16,7 @@ public:
       this->thirdNumber = thirdNumber;
    }
 
-   double solve()
+   List<Step*>* solve()
    {
       long double index = 0;
       int currentPrecision = 0;
@@ -50,19 +51,10 @@ public:
          index = add(new long double[2]{ index, nextIndex(currentPrecision) });
       }
 
-      return index;
+      return steps;
    }
 
 private:
-
-   class Step
-   {
-   public:
-
-      long double number;
-      bool sign;
-      int precision;
-   };
 
    long double firstNumber;
    int fnPower;
@@ -89,6 +81,7 @@ private:
       newStep->number = separateRoot(index);
       newStep->sign = (newStep->number > 0) ? true : false;
       newStep->precision = stepPrecision;
+      newStep->index = index;
 
       return newStep;
    }

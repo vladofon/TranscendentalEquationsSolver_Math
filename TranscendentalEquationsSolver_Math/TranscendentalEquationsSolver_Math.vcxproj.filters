@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Collections">
       <UniqueIdentifier>{aa0fe2a1-ca35-4a36-8d68-2added4ed8ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Formatter">
+      <UniqueIdentifier>{7bc34200-2b38-46e4-8435-4c96c80e13ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TranscendentalEquationsSolver_Math.cpp">
@@ -31,6 +34,24 @@
     </ClInclude>
     <ClInclude Include="ArrayList.h">
       <Filter>Header Files\Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="TableSchema.h">
+      <Filter>Header Files\Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="TableRecord.h">
+      <Filter>Header Files\Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="SchemaParser.h">
+      <Filter>Header Files\Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="SchemaFormatter.h">
+      <Filter>Header Files\Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="EquationFormatter.h">
+      <Filter>Header Files\Formatter</Filter>
+    </ClInclude>
+    <ClInclude Include="Step.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
