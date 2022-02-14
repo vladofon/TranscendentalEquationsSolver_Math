@@ -8,4 +8,6 @@ public:
    long double index;
    bool sign;
    int precision;
+
+   bool isEmpty = false;
 };

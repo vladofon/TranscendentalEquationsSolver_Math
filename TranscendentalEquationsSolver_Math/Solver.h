@@ -1,17 +1,22 @@
 #pragma once
+#include<iostream>
+
 #include <math.h>
 #include"List.h"
 #include"ArrayList.h"
 #include"Step.h"
 
+using namespace std;
+
 class Solver
 {
 public:
 
-   Solver(int firstNumber, int fnPower, int secondNumber, int thirdNumber)
+   Solver(int firstNumber, int fnPower, int secondNumber, int snPower, int thirdNumber)
    {
       this->firstNumber = firstNumber;
       this->fnPower = fnPower;
+      this->snPower = snPower;
       this->secondNumber = secondNumber;
       this->thirdNumber = thirdNumber;
    }
@@ -22,6 +27,9 @@ public:
       int currentPrecision = 0;
       List<Step*>* steps = new ArrayList<Step*>();
       List<Step*>* keySteps = new ArrayList<Step*>();
+
+      int digitChangingCount = 0;
+      int indexChangingCount = 0;
 
       while (currentPrecision != totalPrecision)
       {
@@ -36,25 +44,68 @@ public:
 
             if (current->sign != previous->sign)
             {
-               if (abs(current->number) > abs(previous->number))
-               {
-                  index = add(new long double[2]{ index, nextIndex(currentPrecision) * (-1) });
-                  keySteps->add(makeStep(index, currentPrecision));
-               }
-               else
-               {
-                  keySteps->add(makeStep(index, currentPrecision));
-               }
+               index = previous->index;
+
+               keySteps->add(previous);
+
+               steps->remove(steps->getSize() - 1);
 
                currentPrecision++;
 
-               index = add(new long double[2]{ index, nextIndex(currentPrecision) });
+               digitChangingCount++;
 
-               steps->add(makeStep(index, currentPrecision));
+               indexChangingCount = 0;
+
+               if (digitChangingCount > 1)
+               {
+                  Step* emptyStep = new Step;
+                  emptyStep->isEmpty = true;
+                  emptyStep->precision = currentPrecision - 1;
+
+                  keySteps->remove(keySteps->getSize() - 1);
+                  keySteps->add(emptyStep);
+
+                  digitChangingCount--;
+               }
+
+
+
+               //if (abs(current->number) > abs(previous->number))
+               //{
+               //   index = add(new long double[2]{ index, nextIndex(currentPrecision) * (-1) });
+               //   keySteps->add(makeStep(index, currentPrecision));
+               //}
+               //else
+               //{
+               //   keySteps->add(makeStep(index, currentPrecision));
+               //}
+
+               //currentPrecision++;
+
+               //index = add(new long double[2]{ index, nextIndex(currentPrecision) });
+
+               //steps->add(makeStep(index, currentPrecision));
+            }
+            else
+            {
+               digitChangingCount = 0;
+               indexChangingCount++;
+
+               if (indexChangingCount > 10)
+                  break;
             }
          }
 
          index = add(new long double[2]{ index, nextIndex(currentPrecision) });
+      }
+
+      if (keySteps->getSize() == 0)
+      {
+         Step* notFound = new Step;
+         notFound->precision = 0;
+         notFound->isEmpty = true;
+
+         keySteps->add(notFound);
       }
 
       return keySteps;
@@ -64,10 +115,11 @@ private:
 
    long double firstNumber;
    int fnPower;
+   int snPower;
    long double secondNumber;
    long double thirdNumber;
 
-   int totalPrecision = 4;
+   int totalPrecision = 100;
    long double one = 1;
 
    long double nextIndex(int stepPrecision)
@@ -77,7 +129,7 @@ private:
 
    long double separateRoot(double number)
    {
-      return add(new long double[3]{ pow(number * firstNumber, fnPower), (secondNumber * number), thirdNumber }, 3);
+      return add(new long double[3]{ firstNumber * pow(number, fnPower), secondNumber * pow(number, snPower), thirdNumber }, 3);
    }
 
    Step* makeStep(long double index, int stepPrecision)

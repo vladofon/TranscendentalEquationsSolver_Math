@@ -1,5 +1,7 @@
 #pragma once
 #include<string>
+#include <sstream>
+#include <iomanip>
 #include"List.h"
 #include"ArrayList.h"
 #include "TableSchema.h"
@@ -28,12 +30,15 @@ public:
    {
       List<string>* firstColumn = new ArrayList<string>();
       List<string>* secondColumn = new ArrayList<string>();
+      List<string>* thirdColumn = new ArrayList<string>();
 
       firstColumn = parseIndexesByPrecision(steps);
       secondColumn = parseNumbers(steps);
+      thirdColumn = parsePrecision(steps);
 
       schema->fillColumn(0, 0, firstColumn);
       schema->fillColumn(0, 1, secondColumn);
+      schema->fillColumn(0, 2, thirdColumn);
 
       SchemaParser* parser = new SchemaParser(*schema);
       return parser->parseSchema();
@@ -47,6 +52,7 @@ private:
       schema->createRow("=======+ Solver results +=======");
       schema->getRow(0).createColumn("x");
       schema->getRow(0).createColumn("f(x)");
+      schema->getRow(0).createColumn("precision");
    }
 
    List<string>* parseNumbers(List<Step*>* numbers)
@@ -56,12 +62,22 @@ private:
       long size = numbers->getSize();
       for (long i = 0; i < size; i++)
       {
-         string str = to_string(numbers->get(i)->number);
+         if (numbers->get(i)->isEmpty != true)
+         {
+            ostringstream strs;
+            strs << numbers->get(i)->number;
 
-         if (str[0] != '-')
-            str = " " + str;
+            string str = strs.str();
 
-         stringNumbers->add(str);
+            if (numbers->get(i)->sign == true)
+               str = " " + str;
+
+            stringNumbers->add(str);
+         }
+         else
+         {
+            stringNumbers->add("not exists");
+         }
       }
 
       return stringNumbers;
@@ -80,6 +96,20 @@ private:
       return stringNumbers;
    }
 
+   List<string>* parsePrecision(List<Step*>* indexes)
+   {
+      List<string>* stringNumbers = new ArrayList<string>();
+
+      long size = indexes->getSize();
+      for (long i = 0; i < size; i++)
+      {
+         string precisionString = to_string(indexes->get(i)->precision);
+         stringNumbers->add("10^" + precisionString);
+      }
+
+      return stringNumbers;
+   }
+
    List<string>* parseIndexesByPrecision(List<Step*>* indexes)
    {
       List<string>* stringIndexes = new ArrayList<string>();
@@ -87,20 +117,32 @@ private:
       long size = indexes->getSize();
       for (long i = 0; i < size; i++)
       {
-         long double index = indexes->get(i)->index;
-         int precision = indexes->get(i)->precision;
-
-         int indexSizeBeforeFloatPoint = numberLength(index);
-
-         if (precision == 0)
+         if (indexes->get(i)->isEmpty != true)
          {
-            stringIndexes->add(to_string((long)index));
+            long double index = indexes->get(i)->index;
+            int precision = indexes->get(i)->precision;
+
+            int indexSizeBeforeFloatPoint = numberLength(index);
+
+            if (precision == 0)
+            {
+               stringIndexes->add(to_string((long)index));
+            }
+            else
+            {
+               ostringstream sout;
+               sout << std::setprecision(99) << indexes->get(i)->index;
+               //cout << strs.str() << endl;
+
+               string result = sout.str().substr(0, indexSizeBeforeFloatPoint + precision + 2);
+               stringIndexes->add(result);
+            }
          }
          else
          {
-            string result = to_string(index).substr(0, indexSizeBeforeFloatPoint + precision + 2);
-            stringIndexes->add(result);
+            stringIndexes->add("not exists");
          }
+
       }
 
       return stringIndexes;
