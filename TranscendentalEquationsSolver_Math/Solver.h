@@ -67,24 +67,6 @@ public:
 
                   digitChangingCount--;
                }
-
-
-
-               //if (abs(current->number) > abs(previous->number))
-               //{
-               //   index = add(new long double[2]{ index, nextIndex(currentPrecision) * (-1) });
-               //   keySteps->add(makeStep(index, currentPrecision));
-               //}
-               //else
-               //{
-               //   keySteps->add(makeStep(index, currentPrecision));
-               //}
-
-               //currentPrecision++;
-
-               //index = add(new long double[2]{ index, nextIndex(currentPrecision) });
-
-               //steps->add(makeStep(index, currentPrecision));
             }
             else
             {

@@ -132,7 +132,6 @@ private:
             {
                ostringstream sout;
                sout << std::setprecision(99) << indexes->get(i)->index;
-               //cout << strs.str() << endl;
 
                string result = sout.str().substr(0, indexSizeBeforeFloatPoint + precision + 2);
                stringIndexes->add(result);
