@@ -144,6 +144,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayList.h" />
+    <ClInclude Include="Derivative.h" />
+    <ClInclude Include="InputParser.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="EquationFormatter.h" />
     <ClInclude Include="SchemaFormatter.h" />

@@ -103,7 +103,7 @@ private:
       long size = indexes->getSize();
       for (long i = 0; i < size; i++)
       {
-         string precisionString = to_string(indexes->get(i)->precision);
+         string precisionString = to_string(indexes->get(i)->precision * (-1));
          stringNumbers->add("10^" + precisionString);
       }
 
