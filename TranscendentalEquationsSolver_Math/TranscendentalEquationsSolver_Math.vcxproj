@@ -144,12 +144,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArrayList.h" />
+    <ClInclude Include="ChordSolver.h" />
     <ClInclude Include="Derivative.h" />
     <ClInclude Include="InputParser.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="EquationFormatter.h" />
     <ClInclude Include="SchemaFormatter.h" />
     <ClInclude Include="SchemaParser.h" />
+    <ClInclude Include="BasicSolver.h" />
     <ClInclude Include="Solver.h" />
     <ClInclude Include="Step.h" />
     <ClInclude Include="TableRecord.h" />

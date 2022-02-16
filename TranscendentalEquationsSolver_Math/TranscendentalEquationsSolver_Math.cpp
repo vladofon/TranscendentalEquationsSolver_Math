@@ -29,7 +29,7 @@ int main()
 
    Derivative* derivative = new Derivative;
 
-   cout << derivative->firstOrder(func, 10) << endl;
+   cout << derivative->secondOrder(func, 10) << endl;
 
 }
 
