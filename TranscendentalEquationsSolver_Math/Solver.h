@@ -1,11 +1,21 @@
 #pragma once
 #include"Step.h"
 #include"List.h"
+#include"ArrayList.h"
 #include<math.h>
 
 class EquationMember
 {
 public:
+   EquationMember(int multiplier, int power, bool isVariable)
+   {
+      this->multiplier = multiplier;
+      this->power = power;
+      this->isVariable = isVariable;
+   }
+
+   EquationMember() {}
+
    int multiplier;
    int power;
    bool isVariable;
@@ -27,6 +37,11 @@ class Equation
 {
 public:
 
+   Equation(List<EquationMember>* equation)
+   {
+      this->equation = equation;
+   }
+
    EquationMember get(int index)
    {
       return equation->get(index);
@@ -44,22 +59,85 @@ private:
 
 class Solver
 {
-protected:
-
-   Solver(Equation* equation, int totalPrecision)
+public:
+   Solver(Equation* equation)
    {
-      this->totalPrecision = totalPrecision;
       this->equation = equation;
    }
+protected:
 
-   List<Step*>* findRoot(Equation equation, int startPoint = 0)
+   Step* findRoot(long double startPoint = 0, int currentPrecision = 0)
    {
+      List<Step*>* steps = new ArrayList<Step*>();
+      List<Step*>* keySteps = new ArrayList<Step*>();
 
+      int digitChangingCount = 0;
+      int indexChangingCount = 0;
+
+      while (keySteps->getSize() != 1)
+      {
+         steps->add(makeStep(startPoint, currentPrecision));
+
+         bool canCreatePair = steps->getSize() > 1;
+
+         if (canCreatePair)
+         {
+            Step* current = steps->get(steps->getSize() - 1);
+            Step* previous = steps->get(steps->getSize() - 2);
+
+            if (current->sign != previous->sign)
+            {
+               startPoint = previous->index;
+
+               keySteps->add(previous);
+
+               steps->remove(steps->getSize() - 1);
+
+               currentPrecision++;
+
+               digitChangingCount++;
+
+               indexChangingCount = 0;
+
+               if (digitChangingCount > 1)
+               {
+                  Step* emptyStep = new Step;
+                  emptyStep->isEmpty = true;
+                  emptyStep->precision = currentPrecision - 1;
+
+                  keySteps->remove(keySteps->getSize() - 1);
+                  keySteps->add(emptyStep);
+
+                  digitChangingCount--;
+               }
+            }
+            else
+            {
+               digitChangingCount = 0;
+               indexChangingCount++;
+
+               if (indexChangingCount > 10)
+                  break;
+            }
+         }
+
+         startPoint = add(new long double[2]{ startPoint, nextIndex(currentPrecision) });
+      }
+
+      if (keySteps->getSize() == 0)
+      {
+         Step* notFound = new Step;
+         notFound->precision = 0;
+         notFound->isEmpty = true;
+
+         keySteps->add(notFound);
+      }
+
+      return keySteps->get(keySteps->getSize() - 1);
    }
 
 private:
    Equation* equation;
-   int totalPrecision;
 
    long double nextIndex(int stepPrecision)
    {
