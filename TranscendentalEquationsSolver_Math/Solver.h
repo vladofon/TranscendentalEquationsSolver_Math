@@ -66,15 +66,18 @@ public:
    }
 protected:
 
-   Step* findRoot(long double startPoint = 0, int currentPrecision = 0)
+   Step* findRoot(long double startPoint = 0, int precision = 0)
    {
       List<Step*>* steps = new ArrayList<Step*>();
       List<Step*>* keySteps = new ArrayList<Step*>();
 
       int digitChangingCount = 0;
       int indexChangingCount = 0;
+      int currentPrecision = precision;
 
-      while (keySteps->getSize() != 1)
+      bool isPrecisionReached = (precision == 0) ? currentPrecision == precision + 1 : currentPrecision == precision + 2;
+
+      while (keySteps->getSize() != precision + 1 && !isPrecisionReached)
       {
          steps->add(makeStep(startPoint, currentPrecision));
 

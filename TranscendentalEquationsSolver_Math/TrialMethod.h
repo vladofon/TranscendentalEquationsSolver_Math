@@ -24,19 +24,21 @@ public:
          if (steps->getSize() == 0)
          {
             steps->add(findRoot());
+            currentPrecision++;
          }
          else
          {
             steps->add(
                findRoot(
                   steps->get(steps->getSize() - 1)->index,
-                  steps->get(steps->getSize() - 1)->precision
+                  currentPrecision
                )
             );
+            currentPrecision++;
          }
       }
 
-      cout << steps->get(steps->getSize() - 1) << endl;
+      cout << steps->get(steps->getSize() - 1)->index << endl;
    }
 
 };
