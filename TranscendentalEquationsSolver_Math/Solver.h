@@ -7,7 +7,7 @@
 class EquationMember
 {
 public:
-   EquationMember(int multiplier, int power, bool isVariable)
+   EquationMember(long double multiplier, int power, bool isVariable)
    {
       this->multiplier = multiplier;
       this->power = power;
@@ -16,7 +16,7 @@ public:
 
    EquationMember() {}
 
-   int multiplier;
+   long double multiplier;
    int power;
    bool isVariable;
 
@@ -64,6 +64,9 @@ public:
    {
       this->equation = equation;
    }
+
+   virtual double long solve(int precision) = 0;
+
 protected:
 
    Step* findRoot(long double startPoint = 0, int precision = 0)

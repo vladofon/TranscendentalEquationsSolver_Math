@@ -14,7 +14,7 @@ public:
 
    }
 
-   void solve(int precision)
+   long double solve(int precision) override
    {
       int currentPrecision = 0;
       List<Step*>* steps = new ArrayList<Step*>();

@@ -35,10 +35,10 @@ int main()
 
    List<EquationMember>* members = new ArrayList<EquationMember>();
    members->add(EquationMember(1, 3, true));
-   members->add(EquationMember(-6, 2, true));
-   members->add(EquationMember(20, 1, false));
+   members->add(EquationMember(-4, 1, true));
+   members->add(EquationMember(-1, 1, false));
 
    TrialMethod* solver = new TrialMethod(new Equation(members));
-   solver->solve(4);
+   solver->solve(7);
 }
 
