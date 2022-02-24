@@ -21,14 +21,17 @@ public:
 
       return 0;
    }
-   Equation* equation1 = nullptr;
+
 private:
    Derivative* derivative;
    DerivativeFunction* func;
 
    long double calculate(long double a, long double b, int precision)
    {
+      long double functionA = equation->getFunctionFrom(a);
+      long double functionB = equation->getFunctionFrom(b);
 
+      return a - (functionA / (functionB - functionA)) * (b - a);
    }
 
    bool chooseWay(long double pointLocation)

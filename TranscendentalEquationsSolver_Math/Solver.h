@@ -52,9 +52,39 @@ public:
       return equation->getSize();
    }
 
+   long double getFunctionFrom(long double x)
+   {
+      long membersCount = size();
+      long double* members = new long double[membersCount];
+
+      for (long i = 0; i < membersCount; i++)
+      {
+         members[i] = equation->get(i).represent(x);
+      }
+
+      return add(members, membersCount);
+   }
+
 private:
 
    List<EquationMember>* equation;
+
+   long double add(long double input[], int length = 2)
+   {
+      long double sum = 0;
+      long double sumOfError = 0;
+
+      for (int i = 0; i < length; i++)
+      {
+         long double y = input[i] - sumOfError;
+         long double t = sum + y;
+         sumOfError = (t - sum) - y;
+
+         sum = t;
+      }
+
+      return sum;
+   }
 };
 
 class Solver
