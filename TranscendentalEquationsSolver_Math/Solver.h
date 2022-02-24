@@ -68,6 +68,7 @@ public:
    virtual double long solve(int precision) = 0;
 
 protected:
+   Equation* equation;
 
    Step* findRoot(long double startPoint = 0, int precision = 0)
    {
@@ -143,7 +144,6 @@ protected:
    }
 
 private:
-   Equation* equation;
 
    long double nextIndex(int stepPrecision)
    {
