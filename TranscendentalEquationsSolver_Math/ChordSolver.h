@@ -9,7 +9,8 @@ public:
 
    ChordSolver(Equation* equation) : Solver(equation)
    {
-      this->derivative = new Derivative();
+      this->func = new DerivativeFunction(equation);
+      this->derivative = new Derivative(this->func);
    }
 
    long double solve(int precision) override
@@ -20,12 +21,25 @@ public:
 
       return 0;
    }
-
+   Equation* equation1 = nullptr;
 private:
    Derivative* derivative;
+   DerivativeFunction* func;
 
-   void chooseWay()
+   long double calculate(long double a, long double b, int precision)
    {
-      derivative->firstOrder();
+
    }
+
+   bool chooseWay(long double pointLocation)
+   {
+      if (derivative->firstOrder(pointLocation) > 0)
+      {
+         return true;
+      }
+
+      return false;
+   }
+
+
 };
