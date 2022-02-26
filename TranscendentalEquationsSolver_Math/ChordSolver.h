@@ -18,9 +18,18 @@ public:
       Step* point = findRoot();
 
       int currentPrecision = 0;
+      long double ksi;
       while (currentPrecision != precision)
       {
-         long double ksi = findRoot()->index;
+         if (currentPrecision == 0)
+         {
+            ksi = findRoot()->index;
+         }
+         else
+         {
+            ksi = calculate(ksi, ksi); // TODO at second ksi need to be the second point
+         }
+
          currentPrecision++;
       }
 
